@@ -77,9 +77,9 @@ export class ProjectController {
                 });
             }
 
-            project.projectName = req.body.projectName || project.projectName;
-            project.clientName = req.body.clientName || project.clientName;
-            project.description = req.body.description || project.description;
+            project.projectName = req.body.projectName;
+            project.clientName = req.body.clientName;
+            project.description = req.body.description;
 
             await project.save();
 
