@@ -14,7 +14,8 @@ export class TaskController {
                 tasks
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Server Error' });
         }
 
     }
@@ -27,7 +28,8 @@ export class TaskController {
                 task: req.task
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Server Error' });
         }
 
     }
@@ -50,7 +52,8 @@ export class TaskController {
                 task: newTask
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Error adding task to project' });
         }
     }
 
@@ -69,7 +72,8 @@ export class TaskController {
             });
 
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Error updating task' });
         }
     }
 
@@ -90,14 +94,15 @@ export class TaskController {
                 task: req.task
             });
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Error deleting task' });
         }
     }
 
 
     static async updateTaskStatus(req: Request, res: Response) {
         const { status } = req.body;
-        
+
         try {
             req.task.status = status;
             await req.task.save();
@@ -108,7 +113,8 @@ export class TaskController {
             });
 
         } catch (error) {
-            res.status(500).json({ message: 'Server Error', error });
+            console.log(error);
+            res.status(500).json({ message: 'Error updating task status' });
         }
 
     }

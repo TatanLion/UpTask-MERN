@@ -14,16 +14,16 @@ export class ProjectController {
                 project
             });
         } catch (error) {
+            console.log(error);
             res.status(400).json({
                 message: 'Error creating project',
-                error
             });
         }
 
     }
 
     static getAllProjects = async (req: Request, res: Response) => {
-        
+
         try {
 
             const projects = await Project.find({});
@@ -33,14 +33,14 @@ export class ProjectController {
             });
 
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 message: 'Error fetching projects',
-                error
             });
         }
     }
 
-    static getProjectById = async (req: Request, res: Response) => {   
+    static getProjectById = async (req: Request, res: Response) => {
         const { id } = req.params;
 
         try {
@@ -57,9 +57,9 @@ export class ProjectController {
                 project
             });
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 message: 'Error fetching project',
-                error
             });
         }
     }
@@ -89,9 +89,9 @@ export class ProjectController {
             });
 
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 message: 'Error updating project',
-                error
             });
         }
 
@@ -112,9 +112,9 @@ export class ProjectController {
                 message: 'Project deleted successfully'
             });
         } catch (error) {
+            console.log(error);
             res.status(500).json({
                 message: 'Error deleting project',
-                error
             });
         }
     }
