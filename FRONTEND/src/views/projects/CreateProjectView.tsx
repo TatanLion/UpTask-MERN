@@ -1,5 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@tanstack/react-query";
 // @NOTE Components
 import ProjectForm from "@/components/projects/ProjectForm";
 // @NOTE Types
@@ -22,11 +23,21 @@ export default function CreateProjectView() {
         defaultValues: initialValues
     });
 
-    const handleSubmitForm = async (formData : ProjectFormData) => {
-        const data = await createProject(formData);
-        toast.success(data.message);
-        navigate("/");
-    }
+    const { mutate } = useMutation({
+        // @NOTE: Función que se ejecutará para crear el proyecto
+        mutationFn: createProject,
+        // @NOTE: Manejar la respuesta exitosa, por ejemplo, mostrar un mensaje de éxito y redirigir al usuario a la lista de proyectos
+        onSuccess: (data) => {
+            toast.success(data.message);
+            navigate("/");
+        },
+        // @NOTE: Manejar errores, por ejemplo, mostrar un mensaje de error
+        onError: (error) => {
+            toast.error(error.message);
+        }
+    });
+
+    const handleSubmitForm = (formData : ProjectFormData) => mutate(formData); // Llamar a la función de mutación para crear el proyecto con los datos del formulario
 
     return (
         <>

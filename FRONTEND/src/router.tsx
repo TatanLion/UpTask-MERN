@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import AppLayout from "@/layouts/AppLayout";
 // Views
 import DashboardView from "@/views/DashboardView";
-import CreateProjectView from "./views/CreateProjectView";
+import CreateProjectView from "@/views/projects/CreateProjectView";
+import EditProjectView from "./views/projects/EditProjectView";
 
 
 export default function Router() {
@@ -13,6 +14,7 @@ export default function Router() {
                 <Route element={<AppLayout />}>
                     <Route path="/" element={<DashboardView />} index />
                     <Route path="/projects/create" element={<CreateProjectView />} />
+                    <Route path="/projects/:projectId/edit" element={<EditProjectView />} />
                 </Route>
             </Routes>
         </BrowserRouter>
