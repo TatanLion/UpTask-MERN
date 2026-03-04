@@ -1,7 +1,9 @@
-import EditProjectForm from "@/components/projects/EditProjectForm";
-import { getProjectById } from "@/services/ProjectAPI";
-import { useQuery } from "@tanstack/react-query";
 import { Navigate, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+// @NOTE: Components
+import EditProjectForm from "@/components/projects/EditProjectForm";
+// @NOTE: Services
+import { getProjectById } from "@/services/ProjectAPI";
 
 export default function EditProjectView() {
 
