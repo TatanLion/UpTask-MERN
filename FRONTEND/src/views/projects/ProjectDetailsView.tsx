@@ -2,8 +2,11 @@ import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 // @NOTE Services
 import { getProjectById } from "@/services/ProjectAPI";
+// @NOTE Components
 import AddTaskModal from "@/components/tasks/AddTaskModal";
 import TaskList from "@/components/tasks/TaskList";
+import EditTaskData from "@/components/tasks/EditTaskData";
+import TaskModalDetails from "@/components/tasks/TaskModalDetails";
 
 export default function ProjectDetailsView() {
 
@@ -13,7 +16,7 @@ export default function ProjectDetailsView() {
     const navigate = useNavigate();
 
     const { data, isLoading, isError } = useQuery({
-        queryKey: ["editProject", projectId],
+        queryKey: ["project", projectId],
         queryFn: () => getProjectById(projectId),
         retry: false, // @NOTE: Se desactiva el reintento automático en caso de error, para manejar el error de forma personalizada
     });
@@ -45,6 +48,10 @@ export default function ProjectDetailsView() {
             />
 
             <AddTaskModal />
+
+            <EditTaskData />
+
+            <TaskModalDetails />
 
         </div>
     );

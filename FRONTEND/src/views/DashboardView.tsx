@@ -49,9 +49,9 @@ export default function DashboardView() {
       </nav>
 
       {data?.length ? (
-        <ul role="list" className="divide-y divide-gray-100 border border-gray-100 mt-10 bg-white shadow-lg">
+        <ul role="list" className="space-y-4 divide-gray-100 border border-gray-100 mt-10">
           {data.map((project) => (
-            <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10">
+            <li key={project._id} className="flex justify-between gap-x-6 px-5 py-10 bg-white shadow-sm">
               <div className="flex min-w-0 gap-x-4">
                 <div className="min-w-0 flex-auto space-y-2">
                   <Link to={`/projects/${project._id}`}

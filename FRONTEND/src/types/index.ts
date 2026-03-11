@@ -30,6 +30,8 @@ export const taskSchema = z.object({
     description: z.string().min(5, "La Descripción de la Tarea es obligatoria"),
     project: z.string().min(1, "El Proyecto es obligatorio"),
     status: taskStatusSchema.default("pending"),
+    createdAt: z.string().optional(),
+    updatedAt: z.string().optional(),
 });
 
 export type Task = z.infer<typeof taskSchema>;
