@@ -15,7 +15,7 @@ export class TaskController {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: 'Server Error' });
+            res.status(500).json({ message: 'Tasks not found' });
         }
 
     }
@@ -29,7 +29,7 @@ export class TaskController {
             });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: 'Server Error' });
+            res.status(500).json({ message: 'Task not found' });
         }
 
     }

@@ -10,6 +10,7 @@ import { corsConfig } from './config/cors';
 // Import database connection
 import dbConnection from './config/db';
 // Import routes
+import authRouter from './routes/authRoutes';
 import projectRouter from './routes/projectRoutes';
 
 
@@ -25,6 +26,7 @@ app.use(cors(corsConfig));
 app.use(express.json());
 
 // Routes
+app.use('/api/auth', authRouter);
 app.use('/api/projects', projectRouter);
 
 export default app;

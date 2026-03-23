@@ -7,6 +7,8 @@ export class ProjectController {
 
         const project = new Project(req.body);
 
+        console.log(req.user);
+
         try {
             await project.save();
             res.status(201).json({

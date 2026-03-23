@@ -1,5 +1,21 @@
 import { z } from 'zod';
 
+// @NOTE: Auth & Users
+export const authSchema = z.object({
+    name: z.string(),
+    email: z.string().email(),
+    password: z.string(),
+    password2: z.string(),
+    token: z.string(),
+});
+type Auth = z.infer<typeof authSchema>;
+export type UserLoginForm = Pick<Auth, "email" | "password">;
+export type UserRegistrationForm = Pick<Auth, "name" | "email" | "password" | "password2">;
+export type ConfirmTokenForm = Pick<Auth, "token">;
+export type RequestNewConfirmationCodeForm = Pick<Auth, "email">;
+export type ForgotPasswordForm = Pick<Auth, "email">;
+export type NewPasswordForm = Pick<Auth, "password" | "password2">;
+
 // @NOTE: Projects
 export const projectSchema = z.object({
     _id: z.string().optional(),

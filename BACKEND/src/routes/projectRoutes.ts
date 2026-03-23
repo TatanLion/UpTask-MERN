@@ -3,6 +3,7 @@ import { body, param } from "express-validator";
 // Middlewares
 import { handleInputErrors } from "../middlewares/validation";
 import { validateProjectExists } from "../middlewares/project";
+import { authenticate } from "../middlewares/auth";
 // Controllers
 import { ProjectController } from "../controllers/ProjectController";
 import { TaskController } from "../controllers/TaskController";
@@ -20,6 +21,7 @@ router.get('/:id',
 );
 
 router.post('/', 
+    authenticate,
     body('projectName').notEmpty().withMessage('Name is required'),
     body('clientName').notEmpty().withMessage('Client name is required'),
     body('description').notEmpty().withMessage('Description is required'),
