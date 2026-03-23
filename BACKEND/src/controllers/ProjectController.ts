@@ -7,7 +7,7 @@ export class ProjectController {
 
         const project = new Project(req.body);
 
-        console.log(req.user);
+        project.manager = req.user._id; // Assign the manager to the project
 
         try {
             await project.save();
@@ -28,7 +28,11 @@ export class ProjectController {
 
         try {
 
-            const projects = await Project.find({});
+            const projects = await Project.find({
+                $or: [
+                    { manager: { $in: req.user._id } } // Check if the user is the manager of the project
+                ]
+            });
             res.status(200).json({
                 message: 'Projects fetched successfully',
                 projects
@@ -54,10 +58,18 @@ export class ProjectController {
                     message: 'Project not found'
                 });
             }
+
+            if (project.manager.toString() !== req.user._id.toString()) {
+                return res.status(403).json({
+                    message: 'Action not authorized'
+                });
+            }
+
             res.status(200).json({
                 message: 'Project fetched successfully',
                 project
             });
+
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -76,6 +88,12 @@ export class ProjectController {
             if (!project) {
                 return res.status(404).json({
                     message: 'Project not found'
+                });
+            }
+
+            if (project.manager.toString() !== req.user._id.toString()) {
+                return res.status(403).json({
+                    message: 'Only the manager can update the project'
                 });
             }
 
@@ -105,14 +123,23 @@ export class ProjectController {
 
         try {
             const project = await Project.findByIdAndDelete(id);
+
             if (!project) {
                 return res.status(404).json({
                     message: 'Project not found'
                 });
             }
+
+            if (project.manager.toString() !== req.user._id.toString()) {
+                return res.status(403).json({
+                    message: 'Only the manager can delete the project'
+                });
+
+            }
             res.status(200).json({
                 message: 'Project deleted successfully'
             });
+
         } catch (error) {
             console.log(error);
             res.status(500).json({

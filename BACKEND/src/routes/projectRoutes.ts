@@ -9,27 +9,29 @@ import { ProjectController } from "../controllers/ProjectController";
 import { TaskController } from "../controllers/TaskController";
 import { validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
 
-const router : Router = Router();
+const router: Router = Router();
+
+// Use authenticate middleware for all routes
+router.use(authenticate);
 
 // @IMPORTANT: Routes for Project
-router.get('/', ProjectController.getAllProjects );
+router.get('/', ProjectController.getAllProjects);
 
-router.get('/:id', 
+router.get('/:id',
     param('id').isMongoId().withMessage('Invalid project ID'),
     handleInputErrors,
-    ProjectController.getProjectById 
+    ProjectController.getProjectById
 );
 
-router.post('/', 
-    authenticate,
+router.post('/',
     body('projectName').notEmpty().withMessage('Name is required'),
     body('clientName').notEmpty().withMessage('Client name is required'),
     body('description').notEmpty().withMessage('Description is required'),
     handleInputErrors,
-    ProjectController.createProject 
+    ProjectController.createProject
 );
 
-router.put('/:id', 
+router.put('/:id',
     param('id').isMongoId().withMessage('Invalid project ID'),
     body('projectName').notEmpty().withMessage('Name is required'),
     body('clientName').notEmpty().withMessage('Client name is required'),
@@ -38,7 +40,7 @@ router.put('/:id',
     ProjectController.updateProject
 );
 
-router.delete('/:id', 
+router.delete('/:id',
     param('id').isMongoId().withMessage('Invalid project ID'),
     handleInputErrors,
     ProjectController.deleteProject
@@ -84,7 +86,7 @@ router.delete('/:projectId/tasks/:taskId',
     TaskController.deleteTask
 );
 
-router.post('/:projectId/tasks/:taskId/status', 
+router.post('/:projectId/tasks/:taskId/status',
     param('taskId').isMongoId().withMessage('Invalid task ID'),
     body('status').notEmpty().withMessage('Task status is required'),
     handleInputErrors,
