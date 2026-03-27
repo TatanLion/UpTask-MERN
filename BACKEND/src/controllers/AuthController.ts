@@ -120,7 +120,7 @@ export class AuthController {
             }
 
             const isPasswordValid = await bcrypt.compare(password, user.password);
-            
+
             if (!isPasswordValid) {
                 return res.status(401).json({ message: 'Invalid password' });
             }
@@ -153,7 +153,7 @@ export class AuthController {
                 return res.status(400).json({ message: 'User not found' });
             }
 
-            if(userExists.confirmed) {
+            if (userExists.confirmed) {
                 return res.status(403).json({ message: 'User already confirmed' });
             }
 
@@ -257,7 +257,7 @@ export class AuthController {
             }
 
             user.password = await bcrypt.hash(password, 10);
-            
+
             await Promise.allSettled([
                 user.save(),
                 tokenExists.deleteOne()
@@ -268,6 +268,11 @@ export class AuthController {
             console.log(error);
             res.status(500).json({ message: 'Error updating password' });
         }
+    }
+
+
+    static user = async (req: Request, res: Response) => {
+        return res.json(req.user);
     }
 
 }

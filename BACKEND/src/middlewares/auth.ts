@@ -36,6 +36,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
             const user = await User.findById(decoded.id).select('_id email name');
             if (user) {
                 req.user = user;
+                next();
             } else {
                 return res.status(401).json({ message: 'Invalid token' });
             }
@@ -44,6 +45,4 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
         console.log(error);
         return res.status(401).json({ message: 'Invalid token' });
     }
-
-    next();
 }

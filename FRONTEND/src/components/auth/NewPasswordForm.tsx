@@ -27,7 +27,7 @@ export default function NewPasswordForm({ token }: NewPasswordFormProps) {
     const { mutate } = useMutation({
         mutationFn: updatePasswordWithToken,
         onSuccess: (data) => {
-            console.log(data);
+            // console.log(data);
             toast.success(data.message);
             reset();
             navigate('/auth/login');

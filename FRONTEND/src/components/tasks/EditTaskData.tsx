@@ -23,7 +23,7 @@ export default function EditTaskData() {
     retry: false, // @NOTE: Se desactiva el reintento automático en caso de error, para manejar el error de forma personalizada
   })
 
-  console.log(data);
+  // console.log(data);
 
   if (isError) return <Navigate to="/404" />;
 

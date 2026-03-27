@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 // @NOTE: Components
@@ -10,6 +10,8 @@ import { type UserLoginForm } from '../../types/index';
 import { login } from "@/services/AuthAPI";
 
 export default function LoginView() {
+
+  const navigate = useNavigate();
 
   const initialValues: UserLoginForm = {
     email: '',
@@ -22,6 +24,7 @@ export default function LoginView() {
     onSuccess: (data) => {
       toast.success(data.message);
       reset();
+      navigate("/");
     },
     onError: (data) => {
       toast.error(data.message);

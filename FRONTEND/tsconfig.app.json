@@ -17,6 +17,7 @@
       "@/types/*": ["types/*"],
       "@/utils/*": ["utils/*"],
       "@/views/*": ["views/*"],
+      "@/hooks/*": ["hooks/*"],
 
     },
 
