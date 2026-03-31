@@ -9,6 +9,7 @@ export interface IProject extends Document {
     description: string;
     tasks: PopulatedDoc<ITask & Document>[]; // Array of references to Task model
     manager: PopulatedDoc<IUser & Document>;
+    team: PopulatedDoc<IUser & Document>[];
 }
 
 // Define the Project schema
@@ -37,7 +38,13 @@ const ProjectSchema: Schema = new Schema({
     manager: {
         type: Types.ObjectId,
         ref: 'User' // Reference to User model
-    }
+    },
+    team: [
+        {
+            type: Types.ObjectId,
+            ref: 'User' // Reference to User model
+        }
+    ]
 }, {
     timestamps: true
 });

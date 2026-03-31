@@ -64,3 +64,16 @@ export const taskSchema = z.object({
 
 export type Task = z.infer<typeof taskSchema>;
 export type TaskFormData = Pick<Task, "name" | "description">;
+
+
+
+// @NOTE: Team
+export const teamMemberSchema = userSchema.pick({
+    _id: true,
+    name: true,
+    email: true,
+});
+
+export const teamMembersSchema = z.array(teamMemberSchema);
+export type TeamMember = z.infer<typeof teamMemberSchema>;
+export type TeamMemberFormData = Pick<TeamMember, "email">;

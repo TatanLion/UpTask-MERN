@@ -8,6 +8,7 @@ import { authenticate } from "../middlewares/auth";
 import { ProjectController } from "../controllers/ProjectController";
 import { TaskController } from "../controllers/TaskController";
 import { validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
+import { TeamController } from "../controllers/TeamController";
 
 const router: Router = Router();
 
@@ -49,9 +50,7 @@ router.delete('/:id',
 
 
 // @IMPORTANT: Routes for Tasks
-
 router.param('projectId', validateProjectExists); // Middleware to validate project existence that will run for any route with contains :projectId
-
 router.param('taskId', validateTaskExists); // Middleware to validate taskId existence that will run for any route with contains :taskId
 router.param('taskId', validateTaskBelongsToProject); // Middleware to validate that the task belongs to the project, that will run for any route with contains :taskId, and it will run after validateTaskExists because is declared after it
 
@@ -95,5 +94,27 @@ router.post('/:projectId/tasks/:taskId/status',
 
 
 
+// @IMPORTANT: Routes for Team
+router.post('/:projectId/team/find',
+    body('email').isEmail().toLowerCase().withMessage('Email is not valid'),
+    handleInputErrors,
+    TeamController.findMemberByEmail
+)
+
+router.post('/:projectId/team',
+    body('id').isMongoId().withMessage('Invalid user ID'),
+    handleInputErrors,
+    TeamController.addMemberById
+)
+
+router.delete('/:projectId/team/:userId',
+    param('userId').isMongoId().withMessage('Invalid user ID'),
+    handleInputErrors,
+    TeamController.removeMemberById
+)
+
+router.get('/:projectId/team',
+    TeamController.getProjectTeam
+)
 
 export default router;

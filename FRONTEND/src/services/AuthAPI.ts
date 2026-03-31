@@ -63,6 +63,7 @@ export async function login (formData: UserLoginForm) {
 export async function forgotPassword (formData: { email: string }) {
     try {
         const { data } = await api.post("/auth/forgot-password", formData);
+        console.log(data);
         return data;
     } catch (error) {
         if(isAxiosError(error) && error.response) {
