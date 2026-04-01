@@ -22,7 +22,7 @@ export default function TaskModalDetails() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const taskDetailsId = searchParams.get("taskDetails");
-
+    
     const isOpen = !!taskDetailsId;
 
     const navigate = useNavigate();

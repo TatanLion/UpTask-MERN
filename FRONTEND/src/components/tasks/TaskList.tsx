@@ -4,6 +4,7 @@ import { taskStatusLabels } from "@/locales/es";
 
 interface TaskListProps {
     tasks: Task[];
+    hasAuthorization: boolean;
 }
 
 type GroupedTasks = {
@@ -27,7 +28,7 @@ const taskStatusStyles : { [key: string]: string } = {
     completed: "border-green-400",
 }
 
-export default function TaskList({ tasks }: TaskListProps) {
+export default function TaskList({ tasks, hasAuthorization }: TaskListProps) {
 
     const groupedTasks = tasks.reduce((acc, task) => {
         let currentGroup = acc[task.status] ? [...acc[task.status]] : [];
@@ -51,7 +52,13 @@ export default function TaskList({ tasks }: TaskListProps) {
                             {tasks.length === 0 ? (
                                 <li className="text-gray-500 text-center pt-3">No Hay tareas</li>
                             ) : (
-                                tasks.map(task => <TaskCard key={task._id} task={task} />)
+                                tasks.map(task => 
+                                    <TaskCard 
+                                        key={task._id} 
+                                        task={task} 
+                                        hasAuthorization={hasAuthorization}
+                                    />
+                                )
                             )}
                         </ul>
                     </div>

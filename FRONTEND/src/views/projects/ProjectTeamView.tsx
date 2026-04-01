@@ -3,13 +3,14 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
 import { Fragment } from "react/jsx-runtime";
+import { toast } from "react-toastify";
 // @NOTE Components
 import AddMemberModal from "@/components/team/AddMemberModal";
 import Loading from "@/components/Loading";
 // @NOTE Services
 import { getProjectTeam, removeUserFromProject } from "@/services/TeamAPI";
+// @NOTE Types
 import type { Project, User } from "@/types/index";
-import { toast } from "react-toastify";
 
 type removeUserFromProjectProps = {
   projectId: Project['_id'];

@@ -30,7 +30,8 @@ export class ProjectController {
 
             const projects = await Project.find({
                 $or: [
-                    { manager: { $in: req.user._id } } // Check if the user is the manager of the project
+                    { manager: req.user._id }, // Check if the user is the manager of the project
+                    { team: { $in: [req.user._id] } } // Check if the user is a member of the project
                 ]
             });
             res.status(200).json({
@@ -59,7 +60,7 @@ export class ProjectController {
                 });
             }
 
-            if (project.manager.toString() !== req.user._id.toString()) {
+            if (project.manager.toString() !== req.user._id.toString() && !project.team.includes(req.user._id)) {
                 return res.status(403).json({
                     message: 'Action not authorized'
                 });

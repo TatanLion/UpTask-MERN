@@ -7,7 +7,7 @@ import { authenticate } from "../middlewares/auth";
 // Controllers
 import { ProjectController } from "../controllers/ProjectController";
 import { TaskController } from "../controllers/TaskController";
-import { validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
+import { hasAuthorization, validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
 import { TeamController } from "../controllers/TeamController";
 
 const router: Router = Router();
@@ -50,8 +50,8 @@ router.delete('/:id',
 
 
 // @IMPORTANT: Routes for Tasks
-router.param('projectId', validateProjectExists); // Middleware to validate project existence that will run for any route with contains :projectId
-router.param('taskId', validateTaskExists); // Middleware to validate taskId existence that will run for any route with contains :taskId
+router.param('projectId', validateProjectExists); // Middleware to validate project existence, this it will run for any route with contains :projectId
+router.param('taskId', validateTaskExists); // Middleware to validate taskId existence, this it will run for any route with contains :taskId
 router.param('taskId', validateTaskBelongsToProject); // Middleware to validate that the task belongs to the project, that will run for any route with contains :taskId, and it will run after validateTaskExists because is declared after it
 
 router.get('/:projectId/tasks',
@@ -65,6 +65,7 @@ router.get('/:projectId/tasks/:taskId',
 );
 
 router.post('/:projectId/tasks',
+    hasAuthorization,
     body('name').notEmpty().withMessage('Task name is required'),
     body('description').notEmpty().withMessage('Task description is required'),
     handleInputErrors,
@@ -72,6 +73,7 @@ router.post('/:projectId/tasks',
 );
 
 router.put('/:projectId/tasks/:taskId',
+    hasAuthorization,
     param('taskId').isMongoId().withMessage('Invalid task ID'),
     body('name').notEmpty().withMessage('Task name is required'),
     body('description').notEmpty().withMessage('Task description is required'),
@@ -80,6 +82,7 @@ router.put('/:projectId/tasks/:taskId',
 );
 
 router.delete('/:projectId/tasks/:taskId',
+    hasAuthorization,
     param('taskId').isMongoId().withMessage('Invalid task ID'),
     handleInputErrors,
     TaskController.deleteTask

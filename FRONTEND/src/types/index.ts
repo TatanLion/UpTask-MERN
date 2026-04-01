@@ -31,9 +31,10 @@ export type User = z.infer<typeof userSchema>;
 // @NOTE: Projects
 export const projectSchema = z.object({
     _id: z.string().optional(),
-    projectName: z.string().min(3, "El Titulo del Proyecto es obligatorio"),
-    clientName: z.string().min(3, "El Nombre del Cliente es obligatorio"),
-    description: z.string().min(5, "La Descripción del Proyecto es obligatoria"),
+    projectName: z.string(),
+    clientName: z.string(),
+    description: z.string(),
+    manager: z.string(),
 });
 
 export const dashboardProjectSchema = z.array(
@@ -42,6 +43,7 @@ export const dashboardProjectSchema = z.array(
         projectName: true,
         clientName: true,
         description: true,
+        manager: true,
     })
 );
 
@@ -54,9 +56,9 @@ export const taskStatusSchema = z.enum(["pending", "onHold", "inProgress", "unde
 
 export const taskSchema = z.object({
     _id: z.string().optional(),
-    name: z.string().min(3, "El Nombre de la Tarea es obligatorio"),
-    description: z.string().min(5, "La Descripción de la Tarea es obligatoria"),
-    project: z.string().min(1, "El Proyecto es obligatorio"),
+    name: z.string(),
+    description: z.string(),
+    project: z.string(),
     status: taskStatusSchema.default("pending"),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),

@@ -35,3 +35,14 @@ export function validateTaskBelongsToProject(req: Request, res: Response, next: 
     }
     next();
 }
+
+
+export function hasAuthorization(req: Request, res: Response, next: NextFunction) {
+    if (req.project.manager.toString() !== req.user._id.toString()) {
+        console.error('Task doesn\'t belong to the project');
+        return res.status(400).json(
+            { message: 'Action not allowed' }
+        );
+    }
+    next();
+}

@@ -20,6 +20,7 @@ export async function getTaskById(projectId: Project["_id"], taskId: Task['_id']
     try {
         const { data } = await api.get(`projects/${projectId}/tasks/${taskId}`);
         const response = taskSchema.safeParse(data.task);
+        // console.log({responseData: response, rawData: data});
         if (!response.success) {
             throw new Error("Error al validar los datos de la tarea");
         }
