@@ -29,6 +29,9 @@ export default function ProjectDetailsView() {
         retry: false, // @NOTE: Se desactiva el reintento automático en caso de error, para manejar el error de forma personalizada
     });
 
+    console.log(data);
+    
+
     const hasAutorization = useMemo(() => 
         isManager(data?.project.manager, userData?._id)
     , [data, userData]);
@@ -42,8 +45,8 @@ export default function ProjectDetailsView() {
     // @NOTE: If there is data, render the form with the data
     if (data && userData) return (
         <div>
-            <h1 className="text-5xl font-black">{data.projectName}</h1>
-            <p className="text-2xl font-light text-gray-500 mt-5">{data.description}</p>
+            <h1 className="text-5xl font-black">{data.project.projectName}</h1>
+            <p className="text-2xl font-light text-gray-500 mt-5">{data.project.description}</p>
 
             {isManager(data.project.manager, userData._id) && (
                 <nav className="my-5 flex gap-3">

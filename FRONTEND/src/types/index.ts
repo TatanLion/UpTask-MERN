@@ -60,6 +60,11 @@ export const taskSchema = z.object({
     description: z.string(),
     project: z.string(),
     status: taskStatusSchema.default("pending"),
+    completedBy: z.array(z.object({
+        _id: z.string(),
+        user: userSchema,
+        status: taskStatusSchema,
+    })),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
 });

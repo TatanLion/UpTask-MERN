@@ -19,9 +19,13 @@ export interface ITask extends Document {
     description: string;
     project: Types.ObjectId; // Reference to Project model using Types.ObjectId
     status: TaskStatusType; // Use the TaskStatusType for status field
+    completedBy: {
+        user: Types.ObjectId;
+        status: TaskStatusType;
+    }[];
 }
 
-export const TaskSchema : Schema = new Schema({
+export const TaskSchema: Schema = new Schema({
     name: {
         type: String,
         required: true,
@@ -41,7 +45,21 @@ export const TaskSchema : Schema = new Schema({
         type: String,
         enum: Object.values(TaskStatus),
         default: TaskStatus.PENDING
-    }
+    },
+    completedBy: [
+        {
+            user: {
+                type: Types.ObjectId,
+                ref: 'User',
+                default: null
+            },
+            status: {
+                type: String,
+                enum: Object.values(TaskStatus),
+                default: TaskStatus.PENDING
+            }
+        }
+    ]
 }, {
     timestamps: true
 });

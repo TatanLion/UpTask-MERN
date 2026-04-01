@@ -115,6 +115,21 @@ export default function TaskModalDetails() {
                                             ))}
                                         </select>
                                     </div>
+                                    <div>
+                                        <p className='font-bold text-slate-600'>Historial Cambios Proyecto</p>
+                                        <ul className='list-disc list-inside text-sm text-slate-500'>
+                                            {data.completedBy.map(activityLog => (
+                                                <li key={activityLog._id}>
+                                                    <span className='font-bold'>
+                                                        {activityLog.user.name}
+                                                        </span> cambió el estado a {' '}
+                                                        <span className='font-bold'>
+                                                            {taskStatusLabels[activityLog.status]}
+                                                        </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
                                 </DialogPanel>
                             </TransitionChild>
                         </div>

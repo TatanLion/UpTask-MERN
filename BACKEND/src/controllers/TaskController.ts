@@ -23,9 +23,12 @@ export class TaskController {
     static async getTaskById(req: Request, res: Response) {
 
         try {
+            const task = await Task.findById(req.task._id).populate(
+                { path: 'completedBy.user', select: '_id name email' }
+            );
             res.status(200).json({
                 message: 'Task fetched successfully',
-                task: req.task
+                task,
             });
         } catch (error) {
             console.log(error);
@@ -105,6 +108,15 @@ export class TaskController {
 
         try {
             req.task.status = status;
+
+            // Field completedBy will store the user who completed the task and the status of the task
+            const completedBy = {
+                user: req.user._id,
+                status
+            };
+
+            req.task.completedBy.push(completedBy);
+
             await req.task.save();
 
             res.status(200).json({
