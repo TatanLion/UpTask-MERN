@@ -43,7 +43,7 @@ export class AuthController {
             ]);
 
             return res.status(201).json({
-                message: 'User created successfully',
+                message: 'User created successfully, please check your email',
                 user: userResult,
                 // token: tokenSaved,
                 // emailSent
