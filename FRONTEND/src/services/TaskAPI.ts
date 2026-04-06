@@ -24,6 +24,7 @@ export async function getTaskById(projectId: Project["_id"], taskId: Task['_id']
         if (!response.success) {
             throw new Error("Error al validar los datos de la tarea");
         }
+        console.log(response.data);
         return response.data;
     } catch (error) {
         if (isAxiosError(error) && error.response) {

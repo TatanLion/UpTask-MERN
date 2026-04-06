@@ -14,6 +14,8 @@ export async function validateTaskExists(req: Request, res: Response, next: Next
     try {
         const { taskId } = req.params;
         const task = await Task.findById(taskId);
+        console.log(task);
+
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
@@ -39,7 +41,7 @@ export function validateTaskBelongsToProject(req: Request, res: Response, next: 
 
 export function hasAuthorization(req: Request, res: Response, next: NextFunction) {
     if (req.project.manager.toString() !== req.user._id.toString()) {
-        console.error('Task doesn\'t belong to the project');
+        console.error('User is not authorized to perform this action');
         return res.status(400).json(
             { message: 'Action not allowed' }
         );

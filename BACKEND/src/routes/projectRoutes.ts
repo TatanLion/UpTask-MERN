@@ -4,11 +4,12 @@ import { body, param } from "express-validator";
 import { handleInputErrors } from "../middlewares/validation";
 import { validateProjectExists } from "../middlewares/project";
 import { authenticate } from "../middlewares/auth";
+import { hasAuthorization, validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
 // Controllers
 import { ProjectController } from "../controllers/ProjectController";
 import { TaskController } from "../controllers/TaskController";
-import { hasAuthorization, validateTaskBelongsToProject, validateTaskExists } from "../middlewares/task";
 import { TeamController } from "../controllers/TeamController";
+import { NoteController } from "../controllers/NoteController";
 
 const router: Router = Router();
 
@@ -119,5 +120,25 @@ router.delete('/:projectId/team/:userId',
 router.get('/:projectId/team',
     TeamController.getProjectTeam
 )
+
+
+// @IMPORTANT: Routes for Notes
+router.post('/:projectId/tasks/:taskId/notes',
+    body('content').notEmpty().withMessage('Note content is required'),
+    handleInputErrors,
+    NoteController.createNote
+)
+
+router.get('/:projectId/tasks/:taskId/notes',
+    NoteController.getTasksNotes
+)
+
+router.delete('/:projectId/tasks/:taskId/notes/:noteId',
+    param('noteId').isMongoId().withMessage('Invalid note ID'),
+    handleInputErrors,
+    NoteController.deleteNote
+)
+
+
 
 export default router;

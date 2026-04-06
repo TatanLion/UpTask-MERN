@@ -27,10 +27,7 @@ export default function ProjectDetailsView() {
         queryKey: ["project", projectId],
         queryFn: () => getProjectById(projectId),
         retry: false, // @NOTE: Se desactiva el reintento automático en caso de error, para manejar el error de forma personalizada
-    });
-
-    console.log(data);
-    
+    });    
 
     const hasAutorization = useMemo(() => 
         isManager(data?.project.manager, userData?._id)

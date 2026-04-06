@@ -11,6 +11,8 @@ import { formatDate } from '@/utils/utils';
 import { taskStatusLabels } from '@/locales/es';
 // @NOTE: Types
 import type { Task } from '@/types/index';
+// @NOTE: Components
+import NotesPanel from '../notes/NotesPanel';
 
 
 export default function TaskModalDetails() {
@@ -22,7 +24,7 @@ export default function TaskModalDetails() {
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const taskDetailsId = searchParams.get("taskDetails");
-    
+
     const isOpen = !!taskDetailsId;
 
     const navigate = useNavigate();
@@ -34,9 +36,8 @@ export default function TaskModalDetails() {
         retry: false, // @NOTE: No reintentar en caso de error
     });
 
-
     const queryClient = useQueryClient();
-    
+
     const { mutate } = useMutation({
         mutationFn: (status: Task['status']) => updateTaskStatus(status, projectId, taskDetailsId!),
         onSuccess: (data) => {
@@ -99,37 +100,40 @@ export default function TaskModalDetails() {
                                     <p className='text-lg text-slate-500 mb-2'>Descripción: {data.description}</p>
                                     <div className='my-5 space-y-3'>
                                         <label className='font-bold'>Estado Actual:</label>
-                                        <select 
+                                        <select
                                             id="status"
                                             className='w-full p-3 bg-white border border-gray-300'
                                             defaultValue={data.status}
                                             onChange={(e) => mutate(e.target.value as Task['status'])}
                                         >
                                             {Object.entries(taskStatusLabels).map(([status, label]) => (
-                                                <option 
-                                                    key={status} 
-                                                    value={status}                                               
+                                                <option
+                                                    key={status}
+                                                    value={status}
                                                 >
                                                     {label}
                                                 </option>
                                             ))}
                                         </select>
                                     </div>
-                                    <div>
-                                        <p className='font-bold text-slate-600'>Historial Cambios Proyecto</p>
-                                        <ul className='list-disc list-inside text-sm text-slate-500'>
-                                            {data.completedBy.map(activityLog => (
-                                                <li key={activityLog._id}>
-                                                    <span className='font-bold'>
-                                                        {activityLog.user.name}
+                                    {data.completedBy.length > 0 && (
+                                        <div className='mb-5'>
+                                            <p className='font-bold text-2xl text-slate-600 mt-5 mb-2'>Historial Cambios Estado Proyecto</p>
+                                            <ul className='list-disc list-inside text-sm text-slate-500'>
+                                                {data.completedBy.map(activityLog => (
+                                                    <li key={activityLog._id}>
+                                                        <span className='font-bold'>
+                                                            {activityLog.user.name}
                                                         </span> cambió el estado a {' '}
                                                         <span className='font-bold'>
                                                             {taskStatusLabels[activityLog.status]}
                                                         </span>
-                                                </li>
-                                            ))}
-                                        </ul>
-                                    </div>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                    <NotesPanel notes={data.notes} />
                                 </DialogPanel>
                             </TransitionChild>
                         </div>

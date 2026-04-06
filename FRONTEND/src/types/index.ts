@@ -51,6 +51,19 @@ export type Project = z.infer<typeof projectSchema>;
 export type ProjectFormData = Pick<Project, "projectName" | "clientName" | "description">;
 
 
+// @NOTE: Notes
+export const noteSchema = z.object({
+    _id: z.string().optional(),
+    content: z.string(),
+    createdBy: userSchema,
+    task: z.string(),
+    createdAt: z.string(),
+});
+
+export type Note = z.infer<typeof noteSchema>;
+export type NoteFormData = Pick<Note, "content">;
+
+
 // @NOTE: Tasks
 export const taskStatusSchema = z.enum(["pending", "onHold", "inProgress", "underReview", "completed"]);
 
@@ -65,13 +78,16 @@ export const taskSchema = z.object({
         user: userSchema,
         status: taskStatusSchema,
     })),
+    notes: z.array(noteSchema.extend({
+        createdBy: userSchema,
+        createdAt: z.string(),
+    })),
     createdAt: z.string().optional(),
     updatedAt: z.string().optional(),
 });
 
 export type Task = z.infer<typeof taskSchema>;
 export type TaskFormData = Pick<Task, "name" | "description">;
-
 
 
 // @NOTE: Team
