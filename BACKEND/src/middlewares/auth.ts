@@ -29,8 +29,8 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
     }
 
     try {
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
         if (typeof decoded === 'object' && decoded.id) {
             // We only want to retrieve the user's ID, email, and name
             const user = await User.findById(decoded.id).select('_id email name');

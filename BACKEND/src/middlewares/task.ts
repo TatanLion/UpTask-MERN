@@ -14,7 +14,7 @@ export async function validateTaskExists(req: Request, res: Response, next: Next
     try {
         const { taskId } = req.params;
         const task = await Task.findById(taskId);
-        console.log(task);
+        // console.log(task);
 
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });

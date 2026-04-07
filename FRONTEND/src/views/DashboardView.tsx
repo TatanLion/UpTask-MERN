@@ -1,46 +1,33 @@
-import { Fragment } from 'react'
-import { Link } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from 'react-toastify';
-import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react'
-import { EllipsisVerticalIcon } from '@heroicons/react/20/solid'
+import { Fragment } from 'react';
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { Menu, MenuButton, MenuItem, MenuItems, Transition } from '@headlessui/react';
+import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 // @NOTE: Components
 import Loading from '@/components/Loading';
 // @NOTE: Services
-import { deleteProject, getProjects } from "@/services/ProjectAPI";
+import { getProjects } from "@/services/ProjectAPI";
 // @NOTE: Types
-import type { Project } from '../types';
 // @NOTE: Hooks
 import { useAuth } from '@/hooks/useAuth';
 // @NOTE: Utils
 import { isManager } from '@/utils/policies';
+import DeleteProjectModal from '@/components/projects/DeleteProjectModal';
 
 
 export default function DashboardView() {
 
+  const location = useLocation()
+  const navigate = useNavigate();
+
   // @NOTE: Obtenemos los datos del usuario autenticado para saber si es manager o no.
   const { data: userData, isLoading: isUserLoading } = useAuth();
 
-  const queryClient = useQueryClient();
-
+  
   const { data, isLoading } = useQuery({
     queryKey: ["projects"], // @NOTE: El queryKey es un identificador único para esta consulta, se puede usar para invalidar la consulta o para acceder a los datos almacenados en caché
     queryFn: getProjects,
   });
-
-  // console.log(data, userData, isUserLoading);
-
-  // @NOTE: Mutación para eliminar un proyecto
-  const { mutate } = useMutation({
-    mutationFn: (projectId: Project['_id']) => deleteProject(projectId),
-    onSuccess: (data) => {
-      toast.success(data.message);
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
-    },
-    onError: (error) => {
-      toast.error(error.message);
-    }
-  })
 
   if (isLoading && isUserLoading) return <Loading />
 
@@ -114,7 +101,7 @@ export default function DashboardView() {
                             <button
                               type='button'
                               className='block px-3 py-1 text-sm leading-6 text-red-500'
-                              onClick={() => mutate(project._id)}
+                              onClick={() => navigate(location.pathname + `?deleteProject=${project._id}`)}
                             >
                               Eliminar Proyecto
                             </button>
@@ -139,6 +126,10 @@ export default function DashboardView() {
           </Link>
         </p>
       )}
+
+      {/* // Modal to delete project, only for manager */}
+      <DeleteProjectModal />
+      
 
     </>
   )

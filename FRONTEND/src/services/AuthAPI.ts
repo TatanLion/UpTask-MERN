@@ -1,10 +1,12 @@
 import { isAxiosError } from "axios";
 import api from "@/lib/axios";
-import { userSchema, type ConfirmTokenForm, 
-        type NewPasswordForm, 
-        type RequestNewConfirmationCodeForm, 
-        type UserLoginForm, 
-        type UserRegistrationForm 
+import { userSchema, 
+    type CheckPasswordForm, 
+    type ConfirmTokenForm, 
+    type NewPasswordForm, 
+    type RequestNewConfirmationCodeForm, 
+    type UserLoginForm, 
+    type UserRegistrationForm 
 } from "@/types/index";
 
 
@@ -107,6 +109,20 @@ export async function getUser () {
             throw new Error("Error al obtener el usuario");
         }
         return response.data;
+    } catch (error) {
+        if(isAxiosError(error) && error.response) {
+            throw new Error(error.response.data.message);
+        }
+    }
+}
+
+
+
+export async function checkPassword (password: CheckPasswordForm) {
+    try {
+        const { data } = await api.post("/auth/check-password", password);
+        console.log(data);
+        return data;
     } catch (error) {
         if(isAxiosError(error) && error.response) {
             throw new Error(error.response.data.message);

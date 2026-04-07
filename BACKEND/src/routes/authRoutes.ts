@@ -75,4 +75,36 @@ router.post('/update-password/:token',
 router.get('/user', authenticate, AuthController.user);
 
 
+// @NOTE: Routes for Profile
+router.put('/profile',
+    authenticate,
+    body('name').notEmpty().withMessage('Name is required'),
+    body('email').isEmail().withMessage('Email is not valid'),
+    handleInputErrors,
+    AuthController.updateProfile
+);
+
+router.post('/change-password',
+    authenticate,
+    body('current_password').notEmpty().withMessage('Current password is required'),
+    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters'),
+    body('password').custom((value, { req }) => {
+        if (value !== req.body.password2) {
+            throw new Error('Passwords do not match');
+        }
+        return true;
+    }),
+    handleInputErrors,
+    AuthController.updateCurrentPassword
+);
+
+
+router.post('/check-password',
+    authenticate,
+    body('password').notEmpty().withMessage('Password is required'),
+    handleInputErrors,
+    AuthController.checkPassword
+)
+
+
 export default router;

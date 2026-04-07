@@ -275,5 +275,79 @@ export class AuthController {
         return res.json(req.user);
     }
 
+
+    static updateProfile = async (req: Request, res: Response) => {
+        try {
+            const { name, email } = req.body;
+
+            const userExists = await User.findOne({ email });
+            if (userExists && userExists._id.toString() !== req.user._id.toString()) {
+                return res.status(409).json({ message: 'User already exists' });
+            }
+
+            req.user.name = name;
+            req.user.email = email;
+            await req.user.save();
+            return res.status(200).json({
+                message: 'Profile updated successfully'
+            });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error updating profile' });
+        }
+    }
+
+
+    static updateCurrentPassword = async (req: Request, res: Response) => {
+        try {
+            const { current_password, password } = req.body;
+
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const isPasswordValid = await bcrypt.compare(current_password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: 'Invalid current password' });
+            }
+
+            user.password = await bcrypt.hash(password, 10);
+            await user.save();
+            return res.status(200).json({ message: 'Password updated successfully' });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error updating password' });
+        }
+    }
+
+    static checkPassword = async (req: Request, res: Response) => {
+        try {
+            const { password } = req.body;
+
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                return res.status(404).json({ message: 'User not found' });
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+
+            if (!isPasswordValid) {
+                return res.status(401).json({
+                    message: 'Invalid password',
+                    ok: false
+                });
+            }
+
+            return res.status(200).json({
+                isPasswordValid
+            });
+
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: 'Error checking password' });
+        }
+    }
+
 }
 
