@@ -123,7 +123,7 @@ export class ProjectController {
         const { id } = req.params;
 
         try {
-            const project = await Project.findByIdAndDelete(id);
+            const project = await Project.findById(id);
 
             if (!project) {
                 return res.status(404).json({
@@ -135,8 +135,10 @@ export class ProjectController {
                 return res.status(403).json({
                     message: 'Only the manager can delete the project'
                 });
-
             }
+
+            await project.deleteOne();
+
             res.status(200).json({
                 message: 'Project deleted successfully'
             });

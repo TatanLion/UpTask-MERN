@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Fragment } from "react/jsx-runtime";
+import { useDraggable } from "@dnd-kit/core";
 // @NOTE Services
 import { deleteTask } from "@/services/TaskAPI";
 // @NOTE Types
@@ -15,6 +16,10 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task, hasAuthorization }: TaskCardProps) {
+
+    const { attributes, listeners, setNodeRef, transform } = useDraggable({
+        id: task._id!,
+    });
 
     const navigate = useNavigate();
 
@@ -34,10 +39,20 @@ export default function TaskCard({ task, hasAuthorization }: TaskCardProps) {
         onError: (data) => {
             toast.error(data.message);
         },
-    })
+    });
+
+    // Si transform existe, se aplica el estilo de transformación para mover la tarjeta, de lo contrario, no se aplica ningún estilo.
+    const style = transform ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+    } : undefined;
 
     return (
-        <li className="p-5 bg-white border-slate-300 flex justify-between gap-3">
+        <li className="p-5 bg-white border-slate-300 flex justify-between gap-3"
+            {...listeners}
+            {...attributes}
+            ref={setNodeRef}
+            style={style}
+        >
             <div className="min-w-0 flex flex-col gap-y-4">
                 <button
                     type="button"

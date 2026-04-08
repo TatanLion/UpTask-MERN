@@ -1,4 +1,6 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
+// @NOTE: Models
+import Note from "./Note";
 
 // Define TaskStatus as a constant object
 const TaskStatus = {
@@ -71,6 +73,13 @@ export const TaskSchema: Schema = new Schema({
     timestamps: true
 });
 
+
+// @NOTE: Middleware to delete notes when deleting a task
+TaskSchema.pre('deleteOne', { document: true }, async function () {
+    // console.log('Deleting task...', this);
+    const taskId = this._id;
+    await Note.deleteMany({ task: taskId });
+});
 
 const Task = mongoose.model<ITask>('Task', TaskSchema);
 export default Task;

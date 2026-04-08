@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document, PopulatedDoc, Types } from "mongoose";
-import { ITask } from "./Task.model";
+// @NOTE: Models
+import Task, { ITask } from "./Task.model";
 import { IUser } from "./User.model";
+import Note from "./Note";
 
 // Define the Project interface extending mongoose Document
 export interface IProject extends Document {
@@ -47,6 +49,18 @@ const ProjectSchema: Schema = new Schema({
     ]
 }, {
     timestamps: true
+});
+
+// @NOTE Middleware to delete tasks and notes that belong to a project
+ProjectSchema.pre('deleteOne', { document: true }, async function () {
+    console.log('Deleting project...', this);
+    const projectId = this._id;
+    if (!projectId) return;
+    const tasks = await Task.find({ project: projectId });
+    for (const task of tasks) {
+        await Note.deleteMany({ task: task._id });
+    }
+    await Task.deleteMany({ project: projectId });
 });
 
 // Create and export the Project model
