@@ -1,5 +1,5 @@
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/20/solid";
+import { EllipsisVerticalIcon, RocketLaunchIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -22,11 +22,8 @@ export default function TaskCard({ task, hasAuthorization }: TaskCardProps) {
     });
 
     const navigate = useNavigate();
-
-    // Obtenemos el projectId del URL
     const params = useParams();
     const projectId = params.projectId!;
-
     const queryClient = useQueryClient();
 
     const { mutate } = useMutation({
@@ -41,18 +38,24 @@ export default function TaskCard({ task, hasAuthorization }: TaskCardProps) {
         },
     });
 
-    // Si transform existe, se aplica el estilo de transformación para mover la tarjeta, de lo contrario, no se aplica ningún estilo.
     const style = transform ? {
         transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
     } : undefined;
 
     return (
-        <li className="p-5 bg-white border-slate-300 flex justify-between gap-3"
-            {...listeners}
-            {...attributes}
+        <li
+            className="p-5 bg-white border-slate-300 flex justify-between gap-3"
             ref={setNodeRef}
             style={style}
         >
+            <div
+                className="flex items-center cursor-grab mr-1"
+                {...listeners}
+                {...attributes}
+            >
+                <RocketLaunchIcon className="h-5 w-5 flex-none text-gray-400" aria-hidden="true" />
+            </div>
+
             <div className="min-w-0 flex flex-col gap-y-4">
                 <button
                     type="button"
@@ -65,11 +68,12 @@ export default function TaskCard({ task, hasAuthorization }: TaskCardProps) {
                     {task.description}
                 </p>
             </div>
-            <div className="flex shrink-0  gap-x-6">
+
+            <div className="flex shrink-0 gap-x-6">
                 <Menu as="div" className="relative flex-none">
                     <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
                         <span className="sr-only">opciones</span>
-                        <EllipsisVerticalIcon className="h-9 w-9" aria-hidden="true" />
+                        <EllipsisVerticalIcon className="h-8 w-8" aria-hidden="true" />
                     </MenuButton>
                     <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95"
                         enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75"

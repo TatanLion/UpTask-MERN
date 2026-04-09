@@ -5,8 +5,8 @@ import Tabs from "@/components/profile/Tabs";
 export default function ProfileLayout() {
   return (
     <>
-        <Tabs />
-        <Outlet />
+      <Tabs />
+      <Outlet />
     </>
   )
 }
